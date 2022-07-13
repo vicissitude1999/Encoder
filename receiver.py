@@ -10,7 +10,8 @@ def main():
     ports = list_ports.comports()
     
     for port, desc, hwid in sorted(ports):
-        if "Silicon Labs" in desc or "Prolific" in desc:
+        # Prolific is a keyword of the name of the device in device manager
+        if "Prolific" in desc:
             target_port = port
     if not target_port:
         raise ValueError("USB serial board not found")
