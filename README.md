@@ -30,3 +30,8 @@ Enable serial transmission in raspberry pi config
 
 # Setup service to run rotary_encoder automatically
 Copy tools/supervisor to /etc/
+
+# Receive data on host
+Download and install driver for PL2303 from https://www.prolific.com.tw/US/ShowProduct.aspx?p_id=223&pcid=126
+Once you connect RPi with host computer, you may run receiver.py.
+The order between running receiver.py on host and running rotary_encoder.py on client doesn't matter.
