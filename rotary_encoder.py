@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import time
+import argparse
 
 import serial
 import pigpio
@@ -26,25 +27,35 @@ class DecoderA:
         self.cbA.cancel()
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pin", type=int, default=17, help="GPIO pin number, not physical pin number!")
+    parser.add_argument("--delay", type=float, default=0.1, help="send data once every this many second(s)")
+    parser.add_argument("--baudrate", type=int, default=9600, help="baudrate of uart transmission")
+    parser.add_argument("--timeout", type=int,  default=1, help="timeout of uart data transmission")
+
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
     import pigpio
+
+    args = parse_args()
 
     single = 0
 
     def callback_single():
         global single
         single += 1
-        print("{}".format(single))
+        # print("{}".format(single))
 
     pi = pigpio.pi()
     print("creating decoder")
-    decoder = DecoderA(pi, 17, [callback_single])
+    decoder = DecoderA(pi, args.pin, [callback_single])
 
-    ser = serial.Serial("/dev/ttyS0", baudrate=9600, parity=serial.PARITY_NONE,
-                stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=1)
+    ser = serial.Serial("/dev/ttyS0", baudrate=args.baudrate, parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS, timeout=args.timeout)
     starttime = time.time()
-    delay = 0.1
-
 
     while True:
         # sizeof(l) matters due to the bandwidth/latency limitation of serial transmision
@@ -52,6 +63,6 @@ if __name__ == "__main__":
         l = f"{time.time():.4f} {single}\n"
         l_encoded = l.encode("ascii")
         ser.write(l_encoded)
-        waittime = delay - (time.time() - starttime) % delay
+        waittime = args.delay - (time.time() - starttime) % args.delay
         time.sleep(waittime)
         
