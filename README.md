@@ -19,13 +19,16 @@ set $ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys <PUBKEY>
 
 # Update and install packages
 sudo apt update
+
 sudo apt install supervisor
 
 pip install pigpio
+
 pip install pyserial
 
 # Enable services
 systemctl enable pigpiod
+
 Enable serial transmission in raspberry pi config
 
 # Setup service to run rotary_encoder automatically
