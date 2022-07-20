@@ -27,9 +27,9 @@ pip install pigpio
 pip install pyserial
 
 # Enable services
-systemctl enable pigpiod
+$systemctl enable pigpiod
 
-Enable serial transmission in raspberry pi config
+Use $raspi-config to enable serial transmission in raspberry pi config
 
 # Setup service to run rotary_encoder automatically
 Copy tools/supervisor to /etc/
